@@ -90,32 +90,14 @@ class Money implements CastsAttributes
         ];
     }
 
-    /**
-     * @param MoneyObject $money
-     *
-     * @return string
-     */
-    /*protected static function serialize(MoneyObject $money): string
+    public function serialize($model, string $key, $value, array $attributes)
     {
-        return $money->getAmount();
-    }*/
-
-    /**
-     * @param string $serialized
-     * @param CurrencyObject|null $fallbackCurrency
-     *
-     * @throws MoneyCastException
-     *
-     * @return MoneyObject
-     */
-    /*protected static function deserialize(string $serialized, CurrencyObject $fallbackCurrency = null): MoneyObject
-    {
-        if (is_null($fallbackCurrency)) {
-            throw new MoneyCastException('Fallback currency requested, but not provided.');
+        if (! $value instanceof MoneyObject) {
+            throw new InvalidArgumentException('Given value is not a Money instance.');
         }
 
-        return new MoneyObject($serialized, $fallbackCurrency);
-    }*/
+        return $value->jsonSerialize();
+    }
 
     /**
      * @param CurrencyObject|string|null $currency

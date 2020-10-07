@@ -23,4 +23,9 @@ class Currency implements CastsAttributes
 
         return $value->getCode();
     }
+
+    public function serialize($model, string $key, $value, array $attributes)
+    {
+        return $this->set($model, $key, $value, $attributes);
+    }
 }

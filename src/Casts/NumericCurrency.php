@@ -41,4 +41,9 @@ class NumericCurrency implements CastsAttributes
 
         return (new ISOCurrencies)->numericCodeFor($value);
     }
+
+    public function serialize($model, string $key, $value, array $attributes)
+    {
+        return $this->set($model, $key, $value, $attributes);
+    }
 }
