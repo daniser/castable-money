@@ -1,0 +1,43 @@
+{
+    "name": "ttbooking/castable-money",
+    "description": "MoneyPHP casts for Laravel",
+    "type": "library",
+    "keywords": ["money", "castable", "cast"],
+    "license": "MIT",
+    "support": {
+        "issues": "https://github.com/ttbooking/castable-money/issues",
+        "source": "https://github.com/ttbooking/castable-money"
+    },
+    "authors": [
+        {
+            "name": "Sergey Danilchenko",
+            "email": "s.danilchenko@ttbooking.ru"
+        }
+    ],
+    "require": {
+        "php": "^7.2.5",
+        "illuminate/container": "^7.0|^8.0",
+        "illuminate/database": "^7.0|^8.0",
+        "moneyphp/money": "^3.2",
+        "ttbooking/money-serializer": "^1.0",
+        "ttbooking/safe-money-parser": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.5|^9.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "TTBooking\\CastableMoney\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "TTBooking\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
