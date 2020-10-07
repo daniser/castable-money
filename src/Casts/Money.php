@@ -37,7 +37,7 @@ class Money implements CastsAttributes
     ) {
         $this->currencyAttribute = $currencyAttribute;
 
-        if (! $serializer instanceof SerializesMoney) {
+        if (! is_subclass_of($serializer, SerializesMoney::class)) {
             throw new MoneyCastException('Serializer must implement SerializesMoney contract.');
         }
 
