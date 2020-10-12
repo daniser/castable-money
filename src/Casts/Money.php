@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\CastableMoney\Casts;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
@@ -50,7 +51,7 @@ class Money implements CastsAttributes
 
     public function get($model, string $key, $value, array $attributes)
     {
-        $currency = static::currency($model->{$this->currencyAttribute});
+        $currency = static::currency(data_get($model, $this->currencyAttribute));
 
         return $this->serializer->deserialize($value, $currency);
     }
@@ -61,6 +62,11 @@ class Money implements CastsAttributes
             throw new InvalidArgumentException('Given value is not a Money instance.');
         }
 
+        /** @see https://github.com/laravel/framework/issues/34798 */
+        if (__recurring()) {
+            return '';
+        }
+
         // Model has writable currency attribute (must accept Currency instance)
         if ($model->hasCast($this->currencyAttribute) || $model->hasSetMutator($this->currencyAttribute)) {
             $model->{$this->currencyAttribute} = $value->getCurrency();
@@ -68,11 +74,13 @@ class Money implements CastsAttributes
             return $this->serializer->serialize($value);
         }
 
+        // Currency attribute belongs to related model or
         // Model has public property or read-only attribute with predefined currency
-        elseif (property_exists($model, $this->currencyAttribute) &&
+        elseif (Str::contains($this->currencyAttribute, '.') ||
+            property_exists($model, $this->currencyAttribute) &&
             (new ReflectionProperty($model, $this->currencyAttribute))->isPublic() ||
             $model->hasGetMutator($this->currencyAttribute)) {
-            $currency = static::currency($model->{$this->currencyAttribute});
+            $currency = static::currency(data_get($model, $this->currencyAttribute));
             if (! $value->getCurrency()->equals($currency)) {
                 throw new MoneyCastException(sprintf(
                     'Currency mismatch: %s required, %s provided.',

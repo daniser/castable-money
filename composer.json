@@ -19,6 +19,7 @@
         "illuminate/container": "^7.0|^8.0",
         "illuminate/database": "^7.0|^8.0",
         "moneyphp/money": "^3.2",
+        "ttbooking/circle-of-hell": "^1.0",
         "ttbooking/money-serializer": "^1.0",
         "ttbooking/safe-money-parser": "^1.0"
     },
