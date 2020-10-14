@@ -51,6 +51,10 @@ class Money implements CastsAttributes
 
     public function get($model, string $key, $value, array $attributes)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         $currency = static::currency(data_get($model, $this->currencyAttribute));
 
         return $this->serializer->deserialize($value, $currency);
@@ -58,6 +62,10 @@ class Money implements CastsAttributes
 
     public function set($model, string $key, $value, array $attributes)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if (! $value instanceof MoneyObject) {
             throw new InvalidArgumentException('Given value is not a Money instance.');
         }
@@ -100,6 +108,10 @@ class Money implements CastsAttributes
 
     public function serialize($model, string $key, $value, array $attributes)
     {
+        if (is_null($value)) {
+            return null;
+        }
+
         if (! $value instanceof MoneyObject) {
             throw new InvalidArgumentException('Given value is not a Money instance.');
         }
