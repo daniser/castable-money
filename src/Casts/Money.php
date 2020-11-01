@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace TTBooking\CastableMoney\Casts;
 
 use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 use InvalidArgumentException;
 use Illuminate\Container\Container;
@@ -106,6 +107,32 @@ class Money implements CastsAttributes
         ];
     }
 
+    /**
+     * @param Model $model
+     * @param string $key
+     * @param float|int $amount
+     * @param array $attributes
+     *
+     * @return mixed
+     */
+    public function increment($model, string $key, $amount, array $attributes)
+    {
+        return $this->addOrSubtract($model, $key, $amount, 'add');
+    }
+
+    /**
+     * @param Model $model
+     * @param string $key
+     * @param float|int $amount
+     * @param array $attributes
+     *
+     * @return mixed
+     */
+    public function decrement($model, string $key, $amount, array $attributes)
+    {
+        return $this->addOrSubtract($model, $key, $amount, 'subtract');
+    }
+
     public function serialize($model, string $key, $value, array $attributes)
     {
         if (is_null($value)) {
@@ -131,5 +158,24 @@ class Money implements CastsAttributes
         }
 
         return $currency instanceof CurrencyObject ? $currency : new CurrencyObject($currency);
+    }
+
+    /**
+     * @param Model $model
+     * @param string $key
+     * @param float|int $amount
+     * @param string $method
+     *
+     * @return mixed
+     */
+    protected function addOrSubtract($model, string $key, $amount, string $method)
+    {
+        if (is_null($model->{$key})) {
+            return null;
+        }
+
+        return $model->{$key}->{$method}(
+            $this->serializer->deserialize((string) $amount, $model->{$key}->getCurrency())
+        );
     }
 }
