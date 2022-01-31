@@ -16,8 +16,8 @@
     ],
     "require": {
         "php": "^8.0",
-        "illuminate/container": "^8.40",
-        "illuminate/database": "^8.40",
+        "illuminate/container": "^8.40 || ^9.0",
+        "illuminate/database": "^8.40 || ^9.0",
         "moneyphp/money": "^4.0",
         "ttbooking/circle-of-hell": "^1.0",
         "ttbooking/money-serializer": "^1.0"
